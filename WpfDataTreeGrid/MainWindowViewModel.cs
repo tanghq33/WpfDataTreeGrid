@@ -1,57 +1,47 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
-using WpfDataTreeGrid.Models;
-using WpfDataTreeGrid.ViewModels;
 
 namespace WpfDataTreeGrid
 {
+
     public partial class MainWindowViewModel : ObservableObject
     {
-        [ObservableProperty]
-        private TreeGridViewModel<IndexItem> _treeGridViewModel;
+        public ObservableCollection<Index> Indexes { get; set; } = new();
 
+        private TreeGridModel _treeGridModel = new TreeGridModel();
+
+        [ObservableProperty]
+        private TreeGridFlatModel _flatIndexes = new TreeGridFlatModel();
         public MainWindowViewModel()
         {
-            // Initialize the tree grid view model
-            _treeGridViewModel = new TreeGridViewModel<IndexItem>();
-
-            // Create sample data
-            CreateSampleData();
-        }
-
-        private void CreateSampleData()
-        {
-            // Create sample panel and board items
-            var panelIndex1 = new IndexItem
+            var panelIndex1 = new Index
             {
-                PanelBarcode = "Panel1"
+                PanelBarcode = "Panel1",
             };
 
-            var boardIndex1 = new IndexItem
+            var boardIndex1 = new Index
             {
                 BoardBarcode = "Board1"
             };
 
-            var boardIndex2 = new IndexItem
+            var boardIndex2 = new Index
             {
                 BoardBarcode = "Board2"
             };
 
-            // Add boards to panel
-            panelIndex1.AddChild(boardIndex1);
-            panelIndex1.AddChild(boardIndex2);
+            panelIndex1.Children.Add(boardIndex1);
+            panelIndex1.Children.Add(boardIndex2);
 
-            // Add panel to tree grid
-            TreeGridViewModel.AddItem(panelIndex1);
+            _treeGridModel.Add(panelIndex1);
 
-            // Create another panel
-            var panelIndex2 = new IndexItem
+            var panelIndex2 = new Index
             {
-                PanelBarcode = "Panel2"
+                PanelBarcode = "Panel2",
             };
 
-            // Add second panel to tree grid
-            TreeGridViewModel.AddItem(panelIndex2);
+            _treeGridModel.Add(panelIndex2);
+
+            FlatIndexes = _treeGridModel.FlatModel;
         }
     }
 }
