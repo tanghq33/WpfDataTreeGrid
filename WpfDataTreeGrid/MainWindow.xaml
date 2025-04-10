@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:WpfDataTreeGrid.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:WpfDataTreeGrid"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="MainWindow"
@@ -19,7 +20,19 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
-        <controls:TreeDataGrid ItemsSource="{Binding TreeGridViewModel.FlattenedItems}">
+        <controls:TreeDataGrid x:Name="PART_TreeGrid" ItemsSource="{Binding TreeGridViewModel.FlattenedItems}">
+            <!--<i:EventTrigger EventName="MouseDoubleClick">
+                <i:InvokeCommandAction
+                    Command="{Binding RowDoubleClickCommand}"
+                    CommandParameter="{Binding ElementName=PART_TreeGrid, Path=SelectedItem}" />
+            </i:EventTrigger>-->
+            <controls:TreeDataGrid.InputBindings>
+                <MouseBinding
+                    Command="{Binding RowDoubleClickCommand}"
+                    CommandParameter="{Binding ElementName=PART_TreeGrid, Path=SelectedItem}"
+                    Gesture="LeftDoubleClick" />
+            </controls:TreeDataGrid.InputBindings>
+
             <controls:TreeDataGrid.Columns>
                 <DataGridTemplateColumn
                     Width="0.2*"

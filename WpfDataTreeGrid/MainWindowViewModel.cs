@@ -2,6 +2,11 @@
 using System.Collections.ObjectModel;
 using WpfDataTreeGrid.Models;
 using WpfDataTreeGrid.ViewModels;
+using System.Windows.Input; // Added for ICommand
+using CommunityToolkit.Mvvm.Input; // Added for RelayCommand
+using System.Diagnostics; // Added for Debug.WriteLine
+using WpfDataTreeGrid.Infrastructure; // Corrected namespace
+using System.Linq; // Added for Linq query
 
 namespace WpfDataTreeGrid
 {
@@ -52,6 +57,31 @@ namespace WpfDataTreeGrid
 
             // Add second panel to tree grid
             TreeGridViewModel.AddItem(panelIndex2);
+        }
+
+        [RelayCommand]
+        private void RowDoubleClick(object? item)
+        {
+            if (item is IHierarchicalItem hierarchicalItem)
+            {
+                // Check if the item exists in the root collection
+                bool isRootItem = TreeGridViewModel.RootItems.Contains(hierarchicalItem);
+
+                if (isRootItem)
+                {
+                    Debug.WriteLine($"Double-clicked on Root Item (Parent): {hierarchicalItem}");
+                }
+                else
+                {
+                    // To find the parent, we might need to traverse up, but for now just identify as child
+                    Debug.WriteLine($"Double-clicked on Child Item: {hierarchicalItem}");
+                }
+                // Add your command logic here based on whether it's a root or child
+            }
+            else
+            {
+                Debug.WriteLine($"Double-clicked on unknown item type: {item?.GetType().Name ?? "null"}");
+            }
         }
     }
 }
